@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Image, ActivityIndicator, Dimensions, StatusBar} from 'react-native';
+import Weather from "./Weather"
+const {width,height} = Dimensions.get('window');
 
 export default class App extends Component {
   state = {
-    isLoaded: false
+    isLoaded: true
   }
   render() {
     const { isLoaded } = this.state;
     return (
       <View style={styles.container}>
-        {isLoaded ? null : (
+        <StatusBar hidden={true} />
+        {isLoaded ? <Weather/> : (
           <View style={styles.loading}>
-            <Text style={styles.loadingText}>날씨 정보 로딩중...</Text>
+            <View style={styles.upper}><ActivityIndicator size={65} style={styles.loadingAcivity}/>
+<Text style={styles.loadingText}>날씨 정보를 불러오는 중...</Text></View>
           </View>
           )}
       </View>
@@ -29,11 +33,18 @@ const styles = StyleSheet.create({
   loading: {
     flex: 1,
     backgroundColor: '#FDF6AA',
-    justifyContent: 'flex-end',
-    paddingLeft: 25
+    width:width,
+  },
+  loadingAcivity:{
+    paddingTop: 10
   },
   loadingText:{
-    fontSize:35,
-    marginBottom: 100
+    fontSize:30,
+    marginTop: 10
+  },
+  upper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
