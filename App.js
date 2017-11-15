@@ -5,17 +5,36 @@ const {width,height} = Dimensions.get('window');
 
 export default class App extends Component {
   state = {
-    isLoaded: true
+    isLoaded: false
+    error:null
+  }
+
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        this.setState({
+          isLoaded: true
+        });
+      },
+      error => {
+        this.setState({
+          error:error
+        });
+      }
+    );
   }
   render() {
-    const { isLoaded } = this.state;
+    const { isLoaded, error } = this.state;
     return (
       <View style={styles.container}>
         <StatusBar hidden={true} />
         {isLoaded ? <Weather/> : (
           <View style={styles.loading}>
-            <View style={styles.upper}><ActivityIndicator size={65} style={styles.loadingAcivity}/>
-<Text style={styles.loadingText}>날씨 정보를 불러오는 중...</Text></View>
+            <View style={styles.upper}>
+              <ActivityIndicator size={65} style={styles.loadingAcivity}/>
+              <Text style={styles.loadingText}>날씨 정보를 불러오는 중...</Text>
+              {error ? <Text style={styles.errorText}>{error}</Text> : null}
+            </View>
           </View>
           )}
       </View>
@@ -29,6 +48,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  errorText:{
+    color:"red",
+    backgroundColor:"transparent",
   },
   loading: {
     flex: 1,
